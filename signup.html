@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="روضة عمق الطفولة: مركز ضيافة أطفال أهلي بمنهج منتسوري">
+    <meta name="keywords" content="روضة, حضانة, ضيافة أطفال, منتسوري, جدة">
+    <meta name="author" content="Group Members">
+    <title>عمق الطفولة | إنشاء حساب</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap">
+    <!-- External CSS -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <!-- Internal CSS: تنسيقات خاصة بهذي الصفحة -->
+    <style type="text/css">
+        body {
+            background-color: #FAF7FF;
+        }
+
+        .auth-side ol {
+            padding-right: 20px;
+        }
+
+        .auth-side li {
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+
+<body id="top" onload="pageLoaded()">
+
+    <!-- ===== الهيدر والقائمة (Master page) ===== -->
+    <header>
+        <div class="container">
+            <div class="brand">
+                <!-- Image Map: أجزاء الشعار تودّي لصفحة من نحن -->
+                <img src="images/logo.png" alt="شعار عمق الطفولة" width="64" height="56" usemap="#logoMap">
+                <map name="logoMap">
+                    <area shape="circle" coords="32,22,7" href="about.html" alt="من نحن" title="من نحن">
+                    <area shape="rect" coords="6,18,58,40" href="about.html" alt="من نحن" title="من نحن">
+                    <area shape="rect" coords="0,40,64,56" href="about.html" alt="من نحن" title="من نحن">
+                </map>
+                <div class="brand-name">
+                    <b>عمق الطفولة</b>
+                    <small>لضيافة الأطفال</small>
+                </div>
+            </div>
+            <div class="header-left">
+                <nav>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="login.html">تسجيل الدخول</a></li>
+                    </ul>
+                </nav>
+                <a href="signup.html" class="btn header-btn header-btn-active">سجّل طفلك</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="auth">
+
+            <!-- الجزء الملوّن -->
+            <div class="auth-side">
+                <span class="logo-box"><img src="images/logo.png" alt="شعار عمق الطفولة" width="110" height="97"></span>
+                <h2>انضم لعائلة عمق الطفولة</h2>
+                <p>أنشئ حسابك وأرسل طلب تسجيل طفلك، وبتراجع إدارة المركز الطلب وتتواصل معك.</p>
+                <p><b>المرفقات المطلوبة عند التسجيل:</b></p>
+                <ol>
+                    <li>صورة من كرت العائلة أو الهوية للأم والأب</li>
+                    <li>صورة من شهادة الميلاد</li>
+                    <li>صورة من كرت التطعيم</li>
+                    <li>4 صور شخصية (4×6)</li>
+                    <li>العنوان الوطني للأسرة</li>
+                    <li>الشهادة الصحية</li>
+                </ol>
+            </div>
+
+            <!-- الفورم -->
+            <div class="auth-form">
+                <h1>إنشاء حساب</h1>
+                <p class="muted">كل الحقول مطلوبة إلا الملاحظات الصحية.</p>
+
+                <!-- novalidate: نوقف تحقق المتصفح عشان نتحقق بالجافاسكربت -->
+                <form name="signupForm" method="post" onsubmit="return validateSignup()" novalidate>
+
+                    <h3 class="step-title"><span class="step-num">1</span>بيانات ولي الأمر</h3>
+                    <div class="form-group">
+                        <label for="parentName">الاسم الثلاثي</label>
+                        <input type="text" id="parentName" name="parentName" placeholder="مثال: سارة أحمد محمد"
+                               onfocus="highlight(this)" onblur="unhighlight(this)">
+                        <span class="error" id="parentNameError"></span>
+                    </div>
+                    <div class="form-group half half-gap">
+                        <label for="phone">رقم الجوال</label>
+                        <input type="tel" id="phone" name="phone" placeholder="05XXXXXXXX" maxlength="10"
+                               onfocus="highlight(this)" onblur="unhighlight(this)">
+                        <span class="error" id="phoneError"></span>
+                    </div><div class="form-group half">
+                        <label for="email">البريد الإلكتروني</label>
+                        <input type="email" id="email" name="email" placeholder="example@email.com"
+                               onfocus="highlight(this)" onblur="unhighlight(this)">
+                        <span class="error" id="emailError"></span>
+                    </div>
+                    <div class="form-group half half-gap">
+                        <label for="password">كلمة المرور</label>
+                        <div class="password-box">
+                            <input type="password" id="password" name="password" placeholder="8 خانات على الأقل"
+                                   onfocus="highlight(this)" onblur="unhighlight(this)">
+                            <button type="button" class="eye-btn" title="إظهار كلمة المرور" onclick="togglePassword('password', this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg></button>
+                        </div>
+                        <span class="error" id="passwordError"></span>
+                    </div><div class="form-group half">
+                        <label for="confirmPassword">تأكيد كلمة المرور</label>
+                        <div class="password-box">
+                            <input type="password" id="confirmPassword" name="confirmPassword"
+                                   onfocus="highlight(this)" onblur="unhighlight(this)">
+                            <button type="button" class="eye-btn" title="إظهار كلمة المرور" onclick="togglePassword('confirmPassword', this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg></button>
+                        </div>
+                        <span class="error" id="confirmPasswordError"></span>
+                    </div>
+
+                    <h3 class="step-title"><span class="step-num">2</span>بيانات الطفل</h3>
+                    <div class="form-group half half-gap">
+                        <label for="childName">اسم الطفل الثلاثي</label>
+                        <input type="text" id="childName" name="childName"
+                               onfocus="highlight(this)" onblur="unhighlight(this)">
+                        <span class="error" id="childNameError"></span>
+                    </div><div class="form-group half">
+                        <label for="childAge">عمر الطفل (بالسنوات)</label>
+                        <input type="number" id="childAge" name="childAge" min="0" max="10" placeholder="0 للرضيع"
+                               onfocus="highlight(this)" onblur="unhighlight(this)">
+                        <span class="error" id="childAgeError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>الجنس</label>
+                        <label class="choice"><input type="radio" name="gender" value="boy" checked>ولد</label>
+                        <label class="choice"><input type="radio" name="gender" value="girl">بنت</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="level">الفئة العمرية</label>
+                        <select id="level" name="level" onfocus="highlight(this)" onblur="unhighlight(this)">
+                            <option value="">-- اختر الفئة --</option>
+                            <option value="infant">رعاية الرضّع (أقل من سنة)</option>
+                            <option value="nursery">الحضانة التعليمية (1 - 3 سنوات)</option>
+                            <option value="kg1">KG1 (من 3 إلى 4 سنوات)</option>
+                            <option value="kg2">KG2 (من 4 إلى 5 سنوات)</option>
+                            <option value="kg3">KG3 (من 5 إلى 6 سنوات)</option>
+                            <option value="after">ما بعد المدرسة (6 - 10 سنوات)</option>
+                        </select>
+                        <span class="error" id="levelError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="period">الفترة</label>
+                        <select id="period" name="period" onfocus="highlight(this)" onblur="unhighlight(this)">
+                            <option value="morning">الفترة الصباحية (7:30 - 12:00)</option>
+                            <option value="evening">الفترة المسائية (1:00 - 5:00)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="health">ملاحظات صحية أو حساسية (اختياري)</label>
+                        <textarea id="health" name="health" rows="3" placeholder="مثال: حساسية من الفول السوداني"
+                                  onfocus="highlight(this)" onblur="unhighlight(this)"></textarea>
+                    </div>
+
+                    <h3 class="step-title"><span class="step-num">3</span>معلومات إضافية</h3>
+                    <div class="form-group">
+                        <label>هل توافق على تصوير الطفل ونشر الصور في حسابات المركز؟</label>
+                        <label class="choice"><input type="radio" name="photos" value="yes">أوافق</label>
+                        <label class="choice"><input type="radio" name="photos" value="no" checked>لا أوافق</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="terms" name="terms" class="check-input">
+                        <label for="terms" class="check-label" style="display: inline; font-weight: normal;">أقر بصحة البيانات وأوافق على أنظمة المركز</label>
+                        <span class="error" id="termsError"></span>
+                    </div>
+
+                    <input type="submit" value="إرسال طلب التسجيل" class="btn full">
+                    <div class="success-box" id="signupSuccess"></div>
+                </form>
+
+                <p class="center" style="margin-top: 20px;">عندك حساب؟ <a href="login.html"><b>سجّل دخولك</b></a></p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ===== الفوتر ===== -->
+    <footer>
+        <div class="container">
+            <div>
+                <div class="col-3">
+                    <h3>عمق الطفولة</h3>
+                    <p>مركز ضيافة أطفال أهلي في جدة بمنهج منتسوري، تحت إشراف وزارة الموارد البشرية والتنمية الاجتماعية.</p>
+                </div><div class="col-3">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="login.html">تسجيل الدخول</a></li>
+                        <li><a href="signup.html">سجّل طفلك</a></li>
+                    </ul>
+                </div><div class="col-3">
+                    <h3>تواصل معنا</h3>
+                    <ul>
+                        <li>الجوال: 05XXXXXXXX</li>
+                        <li>العنوان: حي المنار شرق، جدة</li>
+                        <li>الدوام: 7:30 صباحًا - 5:00 مساءً</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © <span id="year">2026</span> روضة عمق الطفولة | مشروع طلابي لمقرر CPIS-358، جامعة الملك عبدالعزيز
+            </div>
+        </div>
+    </footer>
+
+    <!-- External Script -->
+    <script type="text/javascript" src="script.js"></script>
+
+    <!-- Embedded Script -->
+    <script type="text/javascript">
+            function pageLoaded() {
+              document.getElementById("year").innerHTML = new Date().getFullYear();
+            }
+    </script>
+</body>
+</html>

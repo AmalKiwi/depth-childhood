@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="روضة عمق الطفولة: مركز ضيافة أطفال أهلي بمنهج منتسوري">
+  <meta name="keywords" content="روضة, حضانة, ضيافة أطفال, منتسوري, جدة">
+  <meta name="author" content="Group Members">
+  <title>عمق الطفولة | تسجيل الدخول</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap">
+  <!-- External CSS -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <!-- Internal CSS: تنسيقات خاصة بهذي الصفحة -->
+  <style type="text/css">
+    body {
+      background-color: #FAF7FF;
+    }
+    /* الشعار والكلام في نص الجزء البنفسجي */
+    .auth-side {
+      text-align: center;
+      padding-top: 170px;
+    }
+    @media screen and (max-width: 850px) {
+      .auth-side {
+        padding-top: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body id="top" onload="pageLoaded()">
+
+  <!-- ===== الهيدر والقائمة (Master page) ===== -->
+  <header>
+    <div class="container">
+      <div class="brand">
+        <!-- Image Map: أجزاء الشعار تودّي لصفحة من نحن -->
+        <img src="images/logo.png" alt="شعار عمق الطفولة" width="64" height="56" usemap="#logoMap">
+        <map name="logoMap">
+          <area shape="circle" coords="32,22,7" href="about.html" alt="من نحن" title="من نحن">
+          <area shape="rect" coords="6,18,58,40" href="about.html" alt="من نحن" title="من نحن">
+          <area shape="rect" coords="0,40,64,56" href="about.html" alt="من نحن" title="من نحن">
+        </map>
+        <div class="brand-name">
+          <b>عمق الطفولة</b>
+          <small>لضيافة الأطفال</small>
+        </div>
+      </div>
+      <div class="header-left">
+        <nav>
+          <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="about.html">من نحن</a></li>
+            <li><a href="login.html" class="active">تسجيل الدخول</a></li>
+          </ul>
+        </nav>
+        <a href="signup.html" class="btn header-btn">سجّل طفلك</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="auth">
+
+      <!-- الجزء الملوّن -->
+      <div class="auth-side">
+        <span class="logo-box"><img src="images/logo.png" alt="شعار عمق الطفولة" width="110" height="97"></span>
+        <h2>أهلًا من جديد!</h2>
+        <p>سجّل دخولك لحسابك في عمق الطفولة.</p>
+      </div>
+
+      <!-- الفورم -->
+      <div class="auth-form">
+        <h1>تسجيل الدخول</h1>
+        <p class="muted">ادخل بريدك الإلكتروني وكلمة المرور.</p>
+
+        <!-- novalidate: نوقف تحقق المتصفح عشان نتحقق بالجافاسكربت -->
+        <form name="loginForm" method="post" onsubmit="return validateLogin()" novalidate>
+          <div class="form-group">
+            <label for="loginEmail">البريد الإلكتروني</label>
+            <input type="email" id="loginEmail" name="loginEmail" placeholder="example@email.com"
+                   onfocus="highlight(this)" onblur="unhighlight(this)">
+            <span class="error" id="loginEmailError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">كلمة المرور</label>
+            <div class="password-box">
+              <input type="password" id="loginPassword" name="loginPassword" placeholder="8 خانات على الأقل"
+                     onfocus="highlight(this)" onblur="unhighlight(this)">
+              <button type="button" class="eye-btn" title="إظهار كلمة المرور" onclick="togglePassword('loginPassword', this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            </div>
+            <span class="error" id="loginPasswordError"></span>
+          </div>
+
+          <div class="form-group">
+            <input type="checkbox" id="remember" name="remember" class="check-input">
+            <label for="remember" class="check-label" style="display: inline; font-weight: normal;">تذكرني</label>
+          </div>
+
+          <input type="submit" value="دخول" class="btn full">
+          <div class="success-box" id="loginSuccess"></div>
+        </form>
+
+        <p class="center" style="margin-top: 20px;">ما عندك حساب؟ <a href="signup.html"><b>أنشئ حساب جديد</b></a></p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== الفوتر ===== -->
+  <footer>
+    <div class="container">
+      <div>
+        <div class="col-3">
+          <h3>عمق الطفولة</h3>
+          <p>مركز ضيافة أطفال أهلي في جدة بمنهج منتسوري، تحت إشراف وزارة الموارد البشرية والتنمية الاجتماعية.</p>
+        </div><div class="col-3">
+          <h3>روابط سريعة</h3>
+          <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="about.html">من نحن</a></li>
+            <li><a href="login.html">تسجيل الدخول</a></li>
+            <li><a href="signup.html">سجّل طفلك</a></li>
+          </ul>
+        </div><div class="col-3">
+          <h3>تواصل معنا</h3>
+          <ul>
+            <li>الجوال: 05XXXXXXXX</li>
+            <li>العنوان: حي المنار شرق، جدة</li>
+            <li>الدوام: 7:30 صباحًا - 5:00 مساءً</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © <span id="year">2026</span> روضة عمق الطفولة | مشروع طلابي لمقرر CPIS-358، جامعة الملك عبدالعزيز
+      </div>
+    </div>
+  </footer>
+
+  <!-- External Script -->
+  <script type="text/javascript" src="script.js"></script>
+
+  <!-- Embedded Script -->
+  <script type="text/javascript">
+    function pageLoaded() {
+      document.getElementById("year").innerHTML = new Date().getFullYear();
+    }
+  </script>
+</body>
+</html>
