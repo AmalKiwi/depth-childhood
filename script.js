@@ -1,229 +1,334 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="روضة عمق الطفولة: مركز ضيافة أطفال أهلي بمنهج منتسوري">
-    <meta name="keywords" content="روضة, حضانة, ضيافة أطفال, منتسوري, جدة">
-    <meta name="author" content="Group Members">
-    <title>عمق الطفولة | إنشاء حساب</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap">
-    <!-- External CSS -->
-    <link rel="stylesheet" type="text/css" href="style.css">
+/* =========================================
+   ملف الجافاسكربت الخارجي (External Script)
+   موقع روضة عمق الطفولة - CPIS-358
+   ========================================= */
 
-    <!-- Internal CSS: تنسيقات خاصة بهذي الصفحة -->
-    <style type="text/css">
-        body {
-            background-color: #FAF7FF;
+
+/* ---------- 1) الصور والنصوص المتغيرة (Dynamic Picture & Text) ---------- */
+var slideImages = ["images/classroom.jpg", "images/softplay.jpg", "images/montessori.jpg", "images/mural.jpg"];
+var slideTitles = ["التأسيس والتعلم المبتكر", "ألعاب داخلية وخارجية", "التعليم بمنهج منتسوري", "بيئة مبهجة من أول خطوة"];
+var slideTexts = [
+    "الحروف والأرقام باللغتين العربية والإنجليزية بأساليب ممتعة وتفاعلية، مع القاعدة البغدادية وتهيئة الطفل للمدرسة.",
+    "مساحات لعب آمنة داخل المركز وخارجه، يتحرك فيها الطفل ويلعب مع أقرانه كل يوم.",
+    "بيئة تعليمية محفزة وأدوات حسية تنمّي استقلالية الطفل وتربط التعلم بالتجربة العملية.",
+    "من الجدار الخارجي إلى الفصول، ألوان ورسومات تخلي الطفل يحب يجي كل يوم."
+];
+var currentSlide = 0;
+
+function showSlide(index) {
+    // إذا تعدّى آخر صورة يرجع للأولى، وإذا نزل عن الأولى يروح للأخيرة
+    if (index >= slideImages.length) {
+        index = 0;
+    } else if (index < 0) {
+        index = slideImages.length - 1;
+    }
+    currentSlide = index;
+
+    document.getElementById("slideImage").src = slideImages[index];
+    document.getElementById("slideTitle").innerHTML = slideTitles[index];
+    document.getElementById("slideText").innerHTML = slideTexts[index];
+
+    // نرسم النقاط بـ for loop ونلوّن نقطة الصورة الحالية
+    var dots = "";
+    for (var i = 0; i < slideImages.length; i++) {
+        if (i == index) {
+            dots += "<span class='dot dot-active'></span>";
+        } else {
+            dots += "<span class='dot'></span>";
         }
+    }
+    document.getElementById("dots").innerHTML = dots;
+}
 
-        .auth-side ol {
-            padding-right: 20px;
+function nextSlide() {
+    showSlide(currentSlide + 1);
+}
+
+function prevSlide() {
+    showSlide(currentSlide - 1);
+}
+
+
+/* ---------- 1-ب) آراء أولياء الأمور: نعرض 3 تعليقات ونحركها ---------- */
+var firstReview = 0;
+var totalReviews = 10;
+
+function showReviews(start) {
+    // كم تعليق نعرض؟ 3 في الكمبيوتر، و1 في الجوال
+    var perPage = 3;
+    if (window.innerWidth < 850) {
+        perPage = 1;
+    }
+
+    // إذا وصلنا للآخر نرجع للبداية
+    if (start > totalReviews - perPage) {
+        start = 0;
+    } else if (start < 0) {
+        start = totalReviews - perPage;
+    }
+    firstReview = start;
+
+    // نمر على كل التعليقات بـ for loop ونظهر بس اللي في الصفحة الحالية
+    for (var i = 0; i < totalReviews; i++) {
+        var card = document.getElementById("review" + i);
+        if (i >= start && i < start + perPage) {
+            card.style.display = "inline-block";
+        } else {
+            card.style.display = "none";
         }
+    }
+}
 
-        .auth-side li {
-            margin-bottom: 6px;
+function nextReviews() {
+    showReviews(firstReview + 1);
+}
+
+function prevReviews() {
+    showReviews(firstReview - 1);
+}
+
+
+/* ---------- 2) تأثير المرور بالماوس على الأرقام (mouseover / mouseout) ---------- */
+function statOver(x) {
+    x.style.backgroundColor = "#F5B323";
+    x.style.color = "#2A2140";
+}
+
+function statOut(x) {
+    x.style.backgroundColor = "transparent";
+    x.style.color = "#FFFFFF";
+}
+
+
+/* ---------- 3) الأسئلة الشائعة (تغيير HTML و CSS بالسكربت) ---------- */
+function toggleAnswer(number) {
+    var box = document.getElementById("question" + number);
+    var answer = document.getElementById("answer" + number);
+    var sign = document.getElementById("sign" + number);
+
+    if (answer.style.display == "block") {
+        answer.style.display = "none";
+        sign.innerHTML = "+";
+        box.style.borderColor = "#ECE4F7";
+    } else {
+        answer.style.display = "block";
+        sign.innerHTML = "−";
+        box.style.borderColor = "#6C3FA6";
+    }
+}
+
+
+/* ---------- 4) دوال مساعدة للفورم ---------- */
+
+// لما الحقل ياخذ focus يتلوّن، ولما يطلع منه (blur) يرجع
+function highlight(x) {
+    x.style.backgroundColor = "#FFFFFF";
+    x.style.borderColor = "#6C3FA6";
+}
+
+function unhighlight(x) {
+    x.style.backgroundColor = "#FAF7FF";
+    x.style.borderColor = "#ECE4F7";
+}
+
+// نكتب رسالة الخطأ تحت الحقل ونخلي حدوده حمراء
+function showError(fieldId, message) {
+    document.getElementById(fieldId + "Error").innerHTML = message;
+    document.getElementById(fieldId).style.borderColor = "#C0392B";
+}
+
+// نمسح رسالة الخطأ ونخلي حدوده خضراء
+function clearError(fieldId) {
+    document.getElementById(fieldId + "Error").innerHTML = "";
+    document.getElementById(fieldId).style.borderColor = "#0E8A78";
+}
+
+// نتأكد إن الإيميل فيه @ وبعدها نقطة
+function isValidEmail(email) {
+    var atPosition = -1;
+    var dotPosition = -1;
+    for (var i = 0; i < email.length; i++) {
+        if (email[i] == "@") {
+            atPosition = i;
         }
-    </style>
-</head>
+        if (email[i] == ".") {
+            dotPosition = i;
+        }
+    }
+    return atPosition > 0 && dotPosition > atPosition + 1 && dotPosition < email.length - 1;
+}
 
-<body id="top" onload="pageLoaded()">
+// نتأكد إن الجوال 10 أرقام ويبدأ بـ 05
+function isValidPhone(phone) {
+    if (phone.length != 10 || phone[0] != "0" || phone[1] != "5") {
+        return false;
+    }
+    var i = 0;
+    while (i < phone.length) {
+        if (phone[i] < "0" || phone[i] > "9") {
+            return false;
+        }
+        i++;
+    }
+    return true;
+}
 
-    <!-- ===== الهيدر والقائمة (Master page) ===== -->
-    <header>
-        <div class="container">
-            <div class="brand">
-                <!-- Image Map: أجزاء الشعار تودّي لصفحة من نحن -->
-                <img src="images/logo.png" alt="شعار عمق الطفولة" width="64" height="56" usemap="#logoMap">
-                <map name="logoMap">
-                    <area shape="circle" coords="32,22,7" href="about.html" alt="من نحن" title="من نحن">
-                    <area shape="rect" coords="6,18,58,40" href="about.html" alt="من نحن" title="من نحن">
-                    <area shape="rect" coords="0,40,64,56" href="about.html" alt="من نحن" title="من نحن">
-                </map>
-                <div class="brand-name">
-                    <b>عمق الطفولة</b>
-                    <small>لضيافة الأطفال</small>
-                </div>
-            </div>
-            <div class="header-left">
-                <nav>
-                    <ul>
-                        <li><a href="index.html">الرئيسية</a></li>
-                        <li><a href="about.html">من نحن</a></li>
-                        <li><a href="login.html">تسجيل الدخول</a></li>
-                    </ul>
-                </nav>
-                <a href="signup.html" class="btn header-btn header-btn-active">سجّل طفلك</a>
-            </div>
-        </div>
-    </header>
+// إظهار وإخفاء كلمة المرور بأيقونة العين (تغيير attribute و HTML بالسكربت)
+var eyeOpen = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+var eyeClosed = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/></svg>';
 
-    <main class="container">
-        <div class="auth">
+function togglePassword(fieldId, button) {
+    var field = document.getElementById(fieldId);
+    if (field.type == "password") {
+        field.type = "text";
+        button.innerHTML = eyeClosed;
+        button.title = "إخفاء كلمة المرور";
+    } else {
+        field.type = "password";
+        button.innerHTML = eyeOpen;
+        button.title = "إظهار كلمة المرور";
+    }
+}
 
-            <!-- الجزء الملوّن -->
-            <div class="auth-side">
-                <span class="logo-box"><img src="images/logo.png" alt="شعار عمق الطفولة" width="110" height="97"></span>
-                <h2>انضم لعائلة عمق الطفولة</h2>
-                <p>أنشئ حسابك وأرسل طلب تسجيل طفلك، وبتراجع إدارة المركز الطلب وتتواصل معك.</p>
-                <p><b>المرفقات المطلوبة عند التسجيل:</b></p>
-                <ol>
-                    <li>صورة من كرت العائلة أو الهوية للأم والأب</li>
-                    <li>صورة من شهادة الميلاد</li>
-                    <li>صورة من كرت التطعيم</li>
-                    <li>4 صور شخصية (4×6)</li>
-                    <li>العنوان الوطني للأسرة</li>
-                    <li>الشهادة الصحية</li>
-                </ol>
-            </div>
 
-            <!-- الفورم -->
-            <div class="auth-form">
-                <h1>إنشاء حساب</h1>
-                <p class="muted">كل الحقول مطلوبة إلا الملاحظات الصحية.</p>
+/* ---------- 5) التحقق من فورم تسجيل الدخول (Form Validation) ---------- */
+function validateLogin() {
+    var ok = true;
+    document.getElementById("loginSuccess").style.display = "none";   // نخفي رسالة النجاح القديمة
+    var email = document.forms["loginForm"]["loginEmail"].value;
+    var password = document.forms["loginForm"]["loginPassword"].value;
 
-                <!-- novalidate: نوقف تحقق المتصفح عشان نتحقق بالجافاسكربت -->
-                <form name="signupForm" method="post" onsubmit="return validateSignup()" novalidate>
+    if (email == "") {
+        showError("loginEmail", "الرجاء إدخال البريد الإلكتروني");
+        ok = false;
+    } else if (!isValidEmail(email)) {
+        showError("loginEmail", "صيغة البريد الإلكتروني غير صحيحة");
+        ok = false;
+    } else {
+        clearError("loginEmail");
+    }
 
-                    <h3 class="step-title"><span class="step-num">1</span>بيانات ولي الأمر</h3>
-                    <div class="form-group">
-                        <label for="parentName">الاسم الثلاثي</label>
-                        <input type="text" id="parentName" name="parentName" placeholder="مثال: سارة أحمد محمد"
-                               onfocus="highlight(this)" onblur="unhighlight(this)">
-                        <span class="error" id="parentNameError"></span>
-                    </div>
-                    <div class="form-group half half-gap">
-                        <label for="phone">رقم الجوال</label>
-                        <input type="tel" id="phone" name="phone" placeholder="05XXXXXXXX" maxlength="10"
-                               onfocus="highlight(this)" onblur="unhighlight(this)">
-                        <span class="error" id="phoneError"></span>
-                    </div><div class="form-group half">
-                        <label for="email">البريد الإلكتروني</label>
-                        <input type="email" id="email" name="email" placeholder="example@email.com"
-                               onfocus="highlight(this)" onblur="unhighlight(this)">
-                        <span class="error" id="emailError"></span>
-                    </div>
-                    <div class="form-group half half-gap">
-                        <label for="password">كلمة المرور</label>
-                        <div class="password-box">
-                            <input type="password" id="password" name="password" placeholder="8 خانات على الأقل"
-                                   onfocus="highlight(this)" onblur="unhighlight(this)">
-                            <button type="button" class="eye-btn" title="إظهار كلمة المرور" onclick="togglePassword('password', this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg></button>
-                        </div>
-                        <span class="error" id="passwordError"></span>
-                    </div><div class="form-group half">
-                        <label for="confirmPassword">تأكيد كلمة المرور</label>
-                        <div class="password-box">
-                            <input type="password" id="confirmPassword" name="confirmPassword"
-                                   onfocus="highlight(this)" onblur="unhighlight(this)">
-                            <button type="button" class="eye-btn" title="إظهار كلمة المرور" onclick="togglePassword('confirmPassword', this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg></button>
-                        </div>
-                        <span class="error" id="confirmPasswordError"></span>
-                    </div>
+    if (password == "") {
+        showError("loginPassword", "الرجاء إدخال كلمة المرور");
+        ok = false;
+    } else if (password.length < 8) {
+        showError("loginPassword", "كلمة المرور 8 خانات على الأقل");
+        ok = false;
+    } else {
+        clearError("loginPassword");
+    }
 
-                    <h3 class="step-title"><span class="step-num">2</span>بيانات الطفل</h3>
-                    <div class="form-group half half-gap">
-                        <label for="childName">اسم الطفل الثلاثي</label>
-                        <input type="text" id="childName" name="childName"
-                               onfocus="highlight(this)" onblur="unhighlight(this)">
-                        <span class="error" id="childNameError"></span>
-                    </div><div class="form-group half">
-                        <label for="childAge">عمر الطفل (بالسنوات)</label>
-                        <input type="number" id="childAge" name="childAge" min="0" max="10" placeholder="0 للرضيع"
-                               onfocus="highlight(this)" onblur="unhighlight(this)">
-                        <span class="error" id="childAgeError"></span>
-                    </div>
-                    <div class="form-group">
-                        <label>الجنس</label>
-                        <label class="choice"><input type="radio" name="gender" value="boy" checked>ولد</label>
-                        <label class="choice"><input type="radio" name="gender" value="girl">بنت</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="level">الفئة العمرية</label>
-                        <select id="level" name="level" onfocus="highlight(this)" onblur="unhighlight(this)">
-                            <option value="">-- اختر الفئة --</option>
-                            <option value="infant">رعاية الرضّع (أقل من سنة)</option>
-                            <option value="nursery">الحضانة التعليمية (من سنة إلى سنتين)</option>
-                            <option value="kg1">روضة أولى KG1 (3 سنوات)</option>
-                            <option value="kg2">روضة ثانية KG2 (4 سنوات)</option>
-                            <option value="kg3">روضة ثالثة KG3 (5 سنوات)</option>
-                            <option value="after">ما بعد المدرسة (من 6 إلى 10 سنوات)</option>
-                        </select>
-                        <span class="error" id="levelError"></span>
-                    </div>
-                    <div class="form-group">
-                        <label for="period">الفترة</label>
-                        <select id="period" name="period" onfocus="highlight(this)" onblur="unhighlight(this)">
-                            <option value="morning">الفترة الصباحية (7:30 - 12:00)</option>
-                            <option value="evening">الفترة المسائية (1:00 - 5:00)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="health">ملاحظات صحية أو حساسية (اختياري)</label>
-                        <textarea id="health" name="health" rows="3" placeholder="مثال: حساسية من الفول السوداني"
-                                  onfocus="highlight(this)" onblur="unhighlight(this)"></textarea>
-                    </div>
+    if (ok) {
+        var box = document.getElementById("loginSuccess");
+        box.innerHTML = "أهلًا بك! تم تسجيل الدخول بنجاح.";
+        box.style.display = "block";
+    }
+    return false;   // ما نرسل الفورم لأنه ما فيه سيرفر
+}
 
-                    <h3 class="step-title"><span class="step-num">3</span>معلومات إضافية</h3>
-                    <div class="form-group">
-                        <label>هل توافق على تصوير الطفل ونشر الصور في حسابات المركز؟</label>
-                        <label class="choice"><input type="radio" name="photos" value="yes">أوافق</label>
-                        <label class="choice"><input type="radio" name="photos" value="no" checked>لا أوافق</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" id="terms" name="terms" class="check-input">
-                        <label for="terms" class="check-label" style="display: inline; font-weight: normal;">أقر بصحة البيانات وأوافق على أنظمة المركز</label>
-                        <span class="error" id="termsError"></span>
-                    </div>
 
-                    <input type="submit" value="إرسال طلب التسجيل" class="btn full">
-                    <div class="success-box" id="signupSuccess"></div>
-                </form>
+/* ---------- 6) التحقق من فورم إنشاء الحساب ---------- */
+function validateSignup() {
+    var ok = true;
+    document.getElementById("signupSuccess").style.display = "none";  // نخفي رسالة النجاح القديمة
+    var form = document.forms["signupForm"];
 
-                <p class="center" style="margin-top: 20px;">عندك حساب؟ <a href="login.html"><b>سجّل دخولك</b></a></p>
-            </div>
+    var name = form["parentName"].value;
+    var phone = form["phone"].value;
+    var email = form["email"].value;
+    var password = form["password"].value;
+    var confirmPass = form["confirmPassword"].value;
+    var childName = form["childName"].value;
+    var childAge = form["childAge"].value;
+    var level = form["level"].value;
 
-        </div>
-    </main>
+    // بيانات ولي الأمر
+    if (name.length < 3) {
+        showError("parentName", "الاسم لازم يكون 3 أحرف على الأقل");
+        ok = false;
+    } else {
+        clearError("parentName");
+    }
 
-    <!-- ===== الفوتر ===== -->
-    <footer>
-        <div class="container">
-            <div>
-                <div class="col-3">
-                    <h3>عمق الطفولة</h3>
-                    <p>مركز ضيافة أطفال أهلي في جدة بمنهج منتسوري، تحت إشراف وزارة الموارد البشرية والتنمية الاجتماعية.</p>
-                </div><div class="col-3">
-                    <h3>روابط سريعة</h3>
-                    <ul>
-                        <li><a href="index.html">الرئيسية</a></li>
-                        <li><a href="about.html">من نحن</a></li>
-                        <li><a href="login.html">تسجيل الدخول</a></li>
-                        <li><a href="signup.html">سجّل طفلك</a></li>
-                    </ul>
-                </div><div class="col-3">
-                    <h3>تواصل معنا</h3>
-                    <ul>
-                        <li>الجوال: 05XXXXXXXX</li>
-                        <li>العنوان: حي المنار شرق، جدة</li>
-                        <li>الدوام: 7:30 صباحًا - 5:00 مساءً</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                © <span id="year">2026</span> روضة عمق الطفولة | مشروع طلابي لمقرر CPIS-358، جامعة الملك عبدالعزيز
-            </div>
-        </div>
-    </footer>
+    if (!isValidPhone(phone)) {
+        showError("phone", "رقم الجوال لازم يبدأ بـ 05 ويكون 10 أرقام");
+        ok = false;
+    } else {
+        clearError("phone");
+    }
 
-    <!-- External Script -->
-    <script type="text/javascript" src="script.js"></script>
+    if (!isValidEmail(email)) {
+        showError("email", "صيغة البريد الإلكتروني غير صحيحة");
+        ok = false;
+    } else {
+        clearError("email");
+    }
 
-    <!-- Embedded Script -->
-    <script type="text/javascript">
-            function pageLoaded() {
-              document.getElementById("year").innerHTML = new Date().getFullYear();
-            }
-    </script>
-</body>
-</html>
+    if (password.length < 8) {
+        showError("password", "كلمة المرور 8 خانات على الأقل");
+        ok = false;
+    } else {
+        clearError("password");
+    }
+
+    if (confirmPass == "" || confirmPass != password) {
+        showError("confirmPassword", "كلمتا المرور غير متطابقتين");
+        ok = false;
+    } else {
+        clearError("confirmPassword");
+    }
+
+    // بيانات الطفل
+    if (childName == "") {
+        showError("childName", "الرجاء إدخال اسم الطفل");
+        ok = false;
+    } else {
+        clearError("childName");
+    }
+
+    if (childAge == "") {
+        showError("childAge", "الرجاء إدخال عمر الطفل");
+        ok = false;
+    } else {
+        clearError("childAge");
+    }
+
+    // نحدد الأعمار المسموحة لكل مستوى بـ switch
+    var min, max, levelName, rangeText;
+    switch (level) {
+        case "infant": min = 0; max = 0; levelName = "رعاية الرضّع"; rangeText = "لأقل من سنة"; break;
+        case "nursery": min = 1; max = 2; levelName = "الحضانة التعليمية"; rangeText = "من سنة إلى سنتين"; break;
+        case "kg1": min = 3; max = 3; levelName = "روضة أولى"; rangeText = "لعمر 3 سنوات"; break;
+        case "kg2": min = 4; max = 4; levelName = "روضة ثانية"; rangeText = "لعمر 4 سنوات"; break;
+        case "kg3": min = 5; max = 5; levelName = "روضة ثالثة"; rangeText = "لعمر 5 سنوات"; break;
+        case "after": min = 6; max = 10; levelName = "ما بعد المدرسة"; rangeText = "من 6 إلى 10 سنوات"; break;
+        default: levelName = "";
+    }
+
+    if (levelName == "") {
+        showError("level", "الرجاء اختيار المستوى");
+        ok = false;
+    } else if (childAge != "") {
+        var age = parseInt(childAge);
+        if (age < min || age > max) {
+            showError("level", "عمر الطفل " + age + " سنوات، ومستوى " + levelName + " " + rangeText);
+            ok = false;
+        } else {
+            clearError("level");
+        }
+    }
+
+    if (!form["terms"].checked) {
+        document.getElementById("termsError").innerHTML = "لازم توافق على الشروط";
+        ok = false;
+    } else {
+        document.getElementById("termsError").innerHTML = "";
+    }
+
+    if (ok) {
+        var box = document.getElementById("signupSuccess");
+        box.innerHTML = "تم إرسال طلب تسجيل " + childName + " بنجاح، بنتواصل معك قريبًا.";
+        box.style.display = "block";
+    }
+    return false;   // ما نرسل الفورم لأنه ما فيه سيرفر
+}
